@@ -1,0 +1,63 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'teacher', 'secretary', 'driver') NOT NULL,
+    profile_photo VARCHAR(255) DEFAULT '/assets/images/user.jpg',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_photo VARCHAR(255) DEFAULT '/assets/images/user.jpg',
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    tc_no VARCHAR(11) NOT NULL,
+    gender ENUM('male', 'female') NOT NULL,
+    disability_type VARCHAR(255),
+    education_program VARCHAR(255),
+    birthdate DATE NOT NULL,
+    birthplace VARCHAR(100),
+    student_info TEXT,
+    guardian_photo VARCHAR(255) DEFAULT '/assets/images/user.jpg',
+    guardian_name VARCHAR(100) NOT NULL,
+    guardian_phone VARCHAR(15) NOT NULL,
+    address TEXT NOT NULL,
+    distance ENUM('near', 'medium', 'far') NOT NULL,
+    transportation ENUM('service', 'self') NOT NULL,
+    location VARCHAR(255),
+    guardian_info TEXT,
+    second_contact_name VARCHAR(100),
+    second_contact_phone VARCHAR(15),
+    days VARCHAR(255),
+    hours VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    user_id INT,
+    note_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE timetable (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    student_id INT NOT NULL,
+    day VARCHAR(20) NOT NULL,
+    hour VARCHAR(20) NOT NULL,
+    UNIQUE (teacher_id, student_id, day, hour)
+);
+
+CREATE TABLE weeklytable (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    student_id INT NOT NULL,
+    day VARCHAR(20) NOT NULL,
+    hour VARCHAR(20) NOT NULL,
+    UNIQUE (teacher_id, student_id, day, hour)
+);

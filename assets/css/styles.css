@@ -1,0 +1,45 @@
+.schedule {
+    display: grid;
+    grid-template-columns: 100px repeat(6, 1fr);
+    grid-template-rows: 50px repeat(10, 1fr);
+    gap: 1px;
+    border: 1px solid #ddd;
+}
+
+.day,
+.time {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.subject {
+    background-color: #e9ecef;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    width: 100%;
+    padding: 5px;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+.page-item.active .page-link {
+    background-color: #1a8754 !important; /* Success rengi */
+    color: white !important; /* Yazı rengi beyaz */
+    border-color: #1a8754 !important; /* Kenar rengi success */
+}

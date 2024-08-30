@@ -1,0 +1,21 @@
+{
+    "name": "Öğrenci Takip Sistemi",
+    "short_name": "OTS Web App",
+    "description": "Öğrenci ve veli takip sistemi",
+    "start_url": "/pages/dashboard.php",
+    "display": "standalone",
+    "background_color": "#178755",
+    "theme_color": "#178755",
+    "icons": [
+        {
+            "src": "/assets/images/favicon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/images/favicon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
