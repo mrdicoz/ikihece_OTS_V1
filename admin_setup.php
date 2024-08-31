@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db_name = $_POST['db_name'];
     $admin_username = $_POST['admin_username'];
     $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
-    $first_name	= $_POST['first_name'];
-    $last_name	= $_POST['last_name'];
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
 
     // config.php dosyasını oluştur
     $config_content = "<?php\n";
@@ -135,6 +135,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt->close();
     $mysqli->close();
+
+    // Başarılı kurulumdan sonra admin_setup.php dosyasını sil
+    if ($success) {
+        $setup_file = __FILE__; // Bu, şu an çalışmakta olan dosyanın yolunu alır
+        unlink($setup_file); // Dosyayı siler
+    }
 }
 ?>
 
