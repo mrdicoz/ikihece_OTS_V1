@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 session_start();
 ob_start(); // Çıktıyı tamponlamak için ob_start() kullanıyoruz
 
-require_once '../includes/config.php';
+require_once '../config.php';
 
 if (!isset($_SESSION['uploaded_csv_file']) || !isset($_SESSION['column_mapping'])) {
     header('Location: upload_csv.php');

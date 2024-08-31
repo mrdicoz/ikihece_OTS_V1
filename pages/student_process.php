@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/config.php';
+require_once '../config.php';
 
 function handleFileUpload($fileKey) {
     if (!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] != UPLOAD_ERR_OK) {

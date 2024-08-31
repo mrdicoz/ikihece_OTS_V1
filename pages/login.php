@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/config.php';
+require_once '../config.php';
 
 // Aktif bir oturum varsa, kullanıcıyı dashboard.php sayfasına yönlendir
 if (isset($_SESSION['user_id'])) {

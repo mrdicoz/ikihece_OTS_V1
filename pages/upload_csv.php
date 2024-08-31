@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 
-require_once '../includes/config.php';
+require_once '../config.php';
 require_once '../includes/header.php';
 
 ini_set('display_errors', 1);

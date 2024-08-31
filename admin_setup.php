@@ -1,6 +1,10 @@
 <?php
 $success = false;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Formdan gelen verileri al
     $db_host = $_POST['db_host'];
@@ -9,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db_name = $_POST['db_name'];
     $admin_username = $_POST['admin_username'];
     $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
+    $first_name	= $_POST['first_name'];
+    $last_name	= $_POST['last_name'];
 
     // config.php dosyasını oluştur
     $config_content = "<?php\n";
@@ -19,7 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $config_content .= "?>";
 
     // config.php dosyasını includes klasörüne kaydet
-    file_put_contents('../includes/config.php', $config_content);
+    if (file_put_contents('config.php', $config_content) === false) {
+        die("Config dosyası oluşturulamadı. Lütfen dosya izinlerini kontrol edin.");
+    }
 
     // Veritabanına bağlan
     $mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
@@ -116,8 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // İlk admin kullanıcısını ekle
-    $stmt = $mysqli->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, 'admin')");
-    $stmt->bind_param('ss', $admin_username, $admin_password);
+    $stmt = $mysqli->prepare("INSERT INTO users (username, password, first_name, last_name, title, role) VALUES (?, ?, ?, ?,'Sistem Yöneticisi', 'admin')");
+    $stmt->bind_param('ssss', $admin_username, $admin_password, $first_name, $last_name);
 
     if ($stmt->execute()) {
         $success = true;
@@ -135,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Kurulumu</title>
+    <title>Öğrenci Takip Sistemi Kurulumu</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -146,11 +154,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-lg-6 col-md-8 col-sm-10">
             <div class="card mt-5 shadow-lg">
                 <div class="card-header text-center">
-                    <h3 class="card-title">Sistem Kurulumunu Tamamla</h3>
+                    <h3 class="card-title">OTS Kurulumuna Hoşgeldiniz!</h3>
                 </div>
                 <div class="card-body">
                     <?php if ($success): ?>
-                        <div class="alert alert-success text-center">Kurulum başarıyla tamamlandı! Admin hesabı oluşturuldu.</div>
+                        <div class="alert alert-success text-center">Kurulum başarıyla tamamlandı! Admin hesabı oluşturuldu. Lütfen "admin_setup.php" dosyasını siliniz!</div>
                         <div class="text-center">
                             <a href="pages/login.php" class="btn btn-primary mt-3">Giriş Yap</a>
                         </div>
@@ -184,6 +192,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="password" name="admin_password" id="admin_password" class="form-control" required>
                             </div>
                             
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">Adı:</label>
+                                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Soyadı:</label>
+                                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                            </div>
                             <button type="submit" class="btn btn-success w-100">Kurulumu Tamamla</button>
                         </form>
                     <?php endif; ?>

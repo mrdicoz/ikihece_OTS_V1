@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../includes/config.php';
+require_once '../config.php';
 
 // Bugünkü günü almak için
 $today = date('N'); // Pazartesi 1, Pazar 7 olarak döner

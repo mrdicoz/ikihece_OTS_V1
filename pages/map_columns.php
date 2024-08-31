@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 
-require_once '../includes/config.php';
+require_once '../config.php';
 require_once '../includes/header.php';
 
 if (!isset($_SESSION['uploaded_csv_file']) || !isset($_SESSION['csv_columns'])) {
