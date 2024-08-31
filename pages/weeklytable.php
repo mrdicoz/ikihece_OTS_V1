@@ -84,12 +84,22 @@ $hours = [
     '18:00:00' => '18:00'
 ];
 
+// Bugünün gününü almak için
+$today = date('N') - 1;
+$todayIndex = $today >= 0 && $today < count($days) ? $today : 0;
 ?>
 
 <?php $pageTitle = "Haftalık Ders Programı"; include '../includes/header.php'; ?>
 
 <div class="container mt-5">
     <h2 class="text-center">Haftalık Ders Programı</h2>
+
+    <!-- Mobil ekranlar için ileri geri butonları -->
+    <div class="d-flex justify-content-between mb-3 d-md-none">
+        <button id="prevDay" class="btn btn-success">Önceki Gün</button>
+        <button id="nextDay" class="btn btn-success">Sonraki Gün</button>
+    </div>
+
     <form action="weeklytable_save.php" method="post">
         <input type="hidden" name="teacher_id" value="<?php echo htmlspecialchars($teacher_id); ?>">
         <div class="table-responsive">
@@ -98,8 +108,8 @@ $hours = [
                 <thead>
                     <tr>
                         <th>Saat</th>
-                        <?php foreach ($days as $day) { ?>
-                            <th><?php echo $day; ?></th>
+                        <?php foreach ($days as $index => $day) { ?>
+                            <th class="day-column <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>" data-day-index="<?php echo $index; ?>"><?php echo $day; ?></th>
                         <?php } ?>
                     </tr>
                 </thead>
@@ -107,11 +117,10 @@ $hours = [
                     <?php foreach ($hours as $db_hour => $display_hour) { ?>
                         <tr>
                             <td><?php echo $display_hour; ?></td>
-                            <?php foreach ($days as $day) { 
+                            <?php foreach ($days as $index => $day) { 
                                 $isActive = isset($schedule_data[$day][$db_hour]) ? 'table-success' : '';
-                                $isTimetable = isset($timetable_data[$day][$db_hour]) ? 'table-danger' : '';
-                                ?>
-                                <td class="<?php echo $isActive . ' ' . $isTimetable; ?>">
+                                $isTimetable = isset($timetable_data[$day][$db_hour]) ? 'table-danger' : ''; ?>
+                                <td class="schedule-cell <?php echo $isActive . ' ' . $isTimetable; ?> <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>" data-day-index="<?php echo $index; ?>">
                                     <select class="form-select tom-select" name="schedule[<?php echo $day; ?>][<?php echo $db_hour; ?>][]" multiple>
                                         <option value="">Öğrenci Seç</option>
                                         <?php
@@ -156,7 +165,6 @@ $hours = [
 
 <?php include '../includes/footer.php';?>
 
-
 <style>
     /* Timetable'den gelen öğrencilere kırmızı renk uygulayalım */
     .option-from-timetable {
@@ -167,31 +175,68 @@ $hours = [
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var elements = document.querySelectorAll('.tom-select');
-    elements.forEach(function(el) {
-        new TomSelect(el, {
-            maxItems: null,  // Sınırsız seçim yapılabilsin
-            plugins: ['remove_button'],  // Seçilen öğeleri kaldırmak için buton ekle
-            create: false,  // Yeni seçenek oluşturulmasın
-            render: {
-                option: function(data, escape) {
-                    // Timetable'den gelen öğrenciye özel stil ekleyelim
-                    var customClass = data.fromTimetable ? 'option-from-timetable' : '';
-                    return '<div class="' + customClass + '">' + escape(data.text) + '</div>';
-                }
-            },
-            onInitialize: function() {
-                // Timetable'den gelen öğrencilere data attribute ekle
-                var options = this.options;
-                for (var value in options) {
-                    if (options[value].fromTimetable) {
-                        var option = this.getOption(value);
-                        if (option) {  // Option öğesi gerçekten varsa
-                            option.setAttribute('data-from-timetable', 'true');
+    function initializeTomSelect() {
+        elements.forEach(function(el) {
+            if (el.tomselect) {
+                el.tomselect.destroy(); // Önceki Tom Select instance'ını yok et
+            }
+            new TomSelect(el, {
+                maxItems: null,  // Sınırsız seçim yapılabilsin
+                plugins: ['remove_button'],  // Seçilen öğeleri kaldırmak için buton ekle
+                create: false,  // Yeni seçenek oluşturulmasın
+                render: {
+                    option: function(data, escape) {
+                        // Timetable'den gelen öğrenciye özel stil ekleyelim
+                        var customClass = data.fromTimetable ? 'option-from-timetable' : '';
+                        return '<div class="' + customClass + '">' + escape(data.text) + '</div>';
+                    }
+                },
+                onInitialize: function() {
+                    // Timetable'den gelen öğrencilere data attribute ekle
+                    var options = this.options;
+                    for (var value in options) {
+                        if (options[value].fromTimetable) {
+                            var option = this.getOption(value);
+                            if (option) {  // Option öğesi gerçekten varsa
+                                option.setAttribute('data-from-timetable', 'true');
+                            }
                         }
                     }
                 }
+            });
+        });
+    }
+
+    // Tom Select başlatıcıyı ilk başta çağır
+    initializeTomSelect();
+
+    var dayIndex = <?php echo $todayIndex; ?>;
+    var totalDays = <?php echo count($days); ?>;
+
+    function updateDayColumns() {
+        document.querySelectorAll('.day-column, .schedule-cell').forEach(function(cell) {
+            cell.classList.remove('d-block', 'd-none');
+            var cellDayIndex = cell.getAttribute('data-day-index');
+            if (cellDayIndex == dayIndex) {
+                cell.classList.add('d-block');
+            } else {
+                cell.classList.add('d-none', 'd-md-table-cell');
             }
         });
+
+        // Tom Select'i yeniden başlat
+        elements = document.querySelectorAll('.tom-select');  // Güncellenen elementleri seç
+        initializeTomSelect();
+    }
+
+    document.getElementById('prevDay').addEventListener('click', function() {
+        dayIndex = (dayIndex - 1 + totalDays) % totalDays;
+        updateDayColumns();
+    });
+
+    document.getElementById('nextDay').addEventListener('click', function() {
+        dayIndex = (dayIndex + 1) % totalDays;
+        updateDayColumns();
     });
 });
 

@@ -80,6 +80,12 @@ $todayIndex = $today >= 0 && $today < count($days) ? $today : 0;
 <div class="container mt-5">
     <h2 class="text-center">Ders Programı</h2>
 
+    <!-- Mobil ekranlar için ileri geri butonları -->
+    <div class="d-flex justify-content-between mb-3 d-md-none">
+        <button id="prevDay" class="btn btn-success">Önceki Gün</button>
+        <button id="nextDay" class="btn btn-success">Sonraki Gün</button>
+    </div>
+
     <?php if (isset($_SESSION['alert_message'])): ?>
         <div class="alert alert-<?php echo htmlspecialchars($_SESSION['alert_type']); ?> alert-dismissible fade show" role="alert">
             <?php echo htmlspecialchars($_SESSION['alert_message']); ?>
@@ -101,7 +107,7 @@ $todayIndex = $today >= 0 && $today < count($days) ? $today : 0;
                     <tr>
                         <th>Saat</th>
                         <?php foreach ($days as $index => $day) { ?>
-                            <th class="<?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>"><?php echo $day; ?></th>
+                            <th class="day-column <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>" data-day-index="<?php echo $index; ?>"><?php echo $day; ?></th>
                         <?php } ?>
                     </tr>
                 </thead>
@@ -111,7 +117,7 @@ $todayIndex = $today >= 0 && $today < count($days) ? $today : 0;
                             <td><?php echo $display_hour; ?></td>
                             <?php foreach ($days as $index => $day) { 
                                 $isActive = isset($schedule_data[$day][$db_hour]) ? 'table-danger' : ''; ?>
-                                <td class="<?php echo $isActive; ?> <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>">
+                                <td class="schedule-cell <?php echo $isActive; ?> <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>" data-day-index="<?php echo $index; ?>">
                                     <select class="form-select tom-select" name="schedule[<?php echo $day; ?>][<?php echo $db_hour; ?>][]" multiple="multiple">
                                         <option value="">Öğrenci Seç</option>
                                         <?php foreach ($students as $student) { 
@@ -138,14 +144,52 @@ $todayIndex = $today >= 0 && $today < count($days) ? $today : 0;
 <?php include '../includes/footer.php'; ?>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elements = document.querySelectorAll('.tom-select');
+document.addEventListener('DOMContentLoaded', function() {
+    var elements = document.querySelectorAll('.tom-select');
+    function initializeTomSelect() {
         elements.forEach(function(el) {
+            if (el.tomselect) {
+                el.tomselect.destroy(); // Önceki Tom Select instance'ını yok et
+            }
             new TomSelect(el, {
                 maxItems: null,  // Sınırsız sayıda seçim yapılabilsin
                 plugins: ['remove_button'],  // Seçilen öğeleri kaldırmak için buton ekle
                 create: false  // Yeni öğe oluşturulmasın
             });
         });
+    }
+
+    // Tom Select başlatıcıyı ilk başta çağır
+    initializeTomSelect();
+
+    var dayIndex = <?php echo $todayIndex; ?>;
+    var totalDays = <?php echo count($days); ?>;
+
+    function updateDayColumns() {
+        document.querySelectorAll('.day-column, .schedule-cell').forEach(function(cell) {
+            cell.classList.remove('d-block', 'd-none');
+            var cellDayIndex = cell.getAttribute('data-day-index');
+            if (cellDayIndex == dayIndex) {
+                cell.classList.add('d-block');
+            } else {
+                cell.classList.add('d-none', 'd-md-table-cell');
+            }
+        });
+
+        // Tom Select'i yeniden başlat
+        elements = document.querySelectorAll('.tom-select');  // Güncellenen elementleri seç
+        initializeTomSelect();
+    }
+
+    document.getElementById('prevDay').addEventListener('click', function() {
+        dayIndex = (dayIndex - 1 + totalDays) % totalDays;
+        updateDayColumns();
     });
+
+    document.getElementById('nextDay').addEventListener('click', function() {
+        dayIndex = (dayIndex + 1) % totalDays;
+        updateDayColumns();
+    });
+});
+
 </script>

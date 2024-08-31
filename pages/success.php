@@ -1,5 +1,6 @@
 <?php
 require_once '../config.php';
+require_once '../includes/header.php';
 ?>
 
 <div class="container mt-5">

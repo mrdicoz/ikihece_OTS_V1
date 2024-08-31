@@ -67,6 +67,13 @@ $todayIndex = ($today == 7) ? 5 : $today - 1; // Pazar günleri Cumartesi göste
 
 <div class="container mt-5">
     <h2 class="text-center">Haftalık Tablo Detayları</h2>
+
+    <!-- Mobil ekranlar için ileri geri butonları -->
+    <div class="d-flex justify-content-between mb-3 d-md-none">
+        <button id="prevDay" class="btn btn-success">Önceki Gün</button>
+        <button id="nextDay" class="btn btn-success">Sonraki Gün</button>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover table-bordered table-sm">
             <caption><?php echo htmlspecialchars($teacher['first_name'] . ' ' . $teacher['last_name']); ?></caption>
@@ -74,7 +81,7 @@ $todayIndex = ($today == 7) ? 5 : $today - 1; // Pazar günleri Cumartesi göste
                 <tr>
                     <th class="text-center">Saat</th>
                     <?php foreach ($days as $index => $day) { ?>
-                        <th class="text-center <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>"><?php echo $day; ?></th>
+                        <th class="text-center day-column <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>" data-day-index="<?php echo $index; ?>"><?php echo $day; ?></th>
                     <?php } ?>
                 </tr>
             </thead>
@@ -85,7 +92,7 @@ $todayIndex = ($today == 7) ? 5 : $today - 1; // Pazar günleri Cumartesi göste
                         <?php foreach ($days as $index => $day) { 
                             $students = isset($schedule_data[$day][$db_hour]) ? $schedule_data[$day][$db_hour] : null;
                             ?>
-                            <td class="text-center <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>">
+                            <td class="text-center schedule-cell <?php echo $index == $todayIndex ? 'd-block' : 'd-none d-md-table-cell'; ?>" data-day-index="<?php echo $index; ?>">
                                 <?php if ($students) { ?>
                                     <div class="student-info d-flex align-items-center justify-content-center flex-column">
                                         <?php foreach ($students as $student_info) { 
@@ -112,3 +119,32 @@ $todayIndex = ($today == 7) ? 5 : $today - 1; // Pazar günleri Cumartesi göste
 </div>
 
 <?php include '../includes/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var dayIndex = <?php echo $todayIndex; ?>;
+    var totalDays = <?php echo count($days); ?>;
+
+    function updateDayColumns() {
+        document.querySelectorAll('.day-column, .schedule-cell').forEach(function(cell) {
+            cell.classList.remove('d-block', 'd-none');
+            var cellDayIndex = cell.getAttribute('data-day-index');
+            if (cellDayIndex == dayIndex) {
+                cell.classList.add('d-block');
+            } else {
+                cell.classList.add('d-none', 'd-md-table-cell');
+            }
+        });
+    }
+
+    document.getElementById('prevDay').addEventListener('click', function() {
+        dayIndex = (dayIndex - 1 + totalDays) % totalDays;
+        updateDayColumns();
+    });
+
+    document.getElementById('nextDay').addEventListener('click', function() {
+        dayIndex = (dayIndex + 1) % totalDays;
+        updateDayColumns();
+    });
+});
+</script>
