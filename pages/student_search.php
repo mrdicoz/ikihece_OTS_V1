@@ -14,7 +14,6 @@ $limit = 25;  // Her sayfada gösterilecek öğrenci sayısı
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;  // Mevcut sayfa numarası
 $offset = ($page - 1) * $limit;  // Kaç kaydı atlayacağımızı hesapla
 
-
 // Varsayılan SQL sorgusu
 $sql = "
     SELECT students.*, 
@@ -61,8 +60,42 @@ if (!empty($_GET['distance']) && $_GET['distance'] !== "") {
     $sql .= " AND distance = '$distance'";
 }
 
-// Toplam kayıt sayısını almak için COUNT(*) sorgusu
-$count_sql = "SELECT COUNT(DISTINCT students.id) AS total FROM students LEFT JOIN timetable ON students.id = timetable.student_id WHERE 1=1";
+// Toplam kayıt sayısını almak için COUNT(*) sorgusu (Filtreler dahil)
+$count_sql = "
+    SELECT COUNT(DISTINCT students.id) AS total 
+    FROM students 
+    LEFT JOIN timetable ON students.id = timetable.student_id 
+    WHERE 1=1
+";
+
+// Gelen filtrelere göre COUNT(*) sorgusunu oluşturma
+if (!empty($_GET['first_name'])) {
+    $first_name = $baglanti->real_escape_string($_GET['first_name']);
+    $count_sql .= " AND first_name LIKE '%$first_name%'";
+}
+
+if (!empty($_GET['last_name'])) {
+    $last_name = $baglanti->real_escape_string($_GET['last_name']);
+    $count_sql .= " AND last_name LIKE '%$last_name%'";
+}
+
+if (!empty($_GET['tc_no'])) {
+    $tc_no = $baglanti->real_escape_string($_GET['tc_no']);
+    $count_sql .= " AND tc_no LIKE '%$tc_no%'";
+}
+
+// Gün filtrelemesi için
+if (!empty($dayCondition)) {
+    $count_sql .= " AND (" . implode(" OR ", $dayCondition) . ")";
+}
+
+// Mesafe filtrelemesi
+if (!empty($_GET['distance']) && $_GET['distance'] !== "") {
+    $distance = $baglanti->real_escape_string($_GET['distance']);
+    $count_sql .= " AND distance = '$distance'";
+}
+
+// Sorguyu çalıştır ve toplam öğrenci sayısını al
 $count_result = $baglanti->query($count_sql);
 $total_students = $count_result->fetch_assoc()['total'];
 
@@ -70,7 +103,6 @@ $total_students = $count_result->fetch_assoc()['total'];
 $total_pages = ceil($total_students / $limit);
 
 $sql .= " GROUP BY students.id LIMIT $limit OFFSET $offset";
-
 
 // Sorguyu çalıştırma
 $result = $baglanti->query($sql);
@@ -135,10 +167,10 @@ function formatPhoneNumberForWhatsApp($phone) {
                         <td class="col-1 d-none d-lg-table-cell"><img src="<?php echo htmlspecialchars(getStudentPhoto($row['guardian_photo'])); ?>" alt="Veli Fotoğrafı" width="50" height="50" class="img-thumbnail"></td>
                         <td class="col-2 d-none d-lg-table-cell"><?php echo htmlspecialchars($row['guardian_name']); ?></td>
                         <td class="col-2 d-none d-lg-table-cell">
-                        <?php 
-                            $formattedPhone = formatPhoneNumberForWhatsApp($row['guardian_phone']); 
-                        ?>
-                        <a href="https://wa.me/+90<?php echo htmlspecialchars($formattedPhone); ?>" target="_blank" class="link-success link-underline link-underline-opacity-0">
+                            <?php 
+                                $formattedPhone = formatPhoneNumberForWhatsApp($row['guardian_phone']); 
+                            ?>
+                            <a href="https://wa.me/+90<?php echo htmlspecialchars($formattedPhone); ?>" target="_blank" class="link-success link-underline link-underline-opacity-0">
                                 <?php echo htmlspecialchars($row['guardian_phone']); ?>
                             </a>
                         </td>
@@ -177,11 +209,9 @@ function formatPhoneNumberForWhatsApp($phone) {
     </table>
 </div>    
 
-
-
 <!-- Sayfalama -->
 <nav>
-    <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center mt-3">
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
             <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
                 <a class="page-link link-success" href="student_search.php?page=<?= $i; ?>"><?= $i; ?></a>
@@ -189,8 +219,6 @@ function formatPhoneNumberForWhatsApp($phone) {
         <?php endfor; ?>
     </ul>
 </nav>
-
-
 
 <?php include '../includes/footer.php'; ?>
 

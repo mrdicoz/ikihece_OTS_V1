@@ -118,7 +118,7 @@ function formatPhoneNumberForWhatsApp($phone) {
 
 <!-- Sayfalama -->
 <nav>
-    <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center mt-3">
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
             <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
                 <a class="page-link link-success" href="dashboard.php?page=<?= $i; ?>"><?= $i; ?></a>

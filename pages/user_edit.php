@@ -94,7 +94,7 @@ if (isset($_GET['id'])) {
 
 <?php $pageTitle = "Kullanıcı Düzenle"; include '../includes/header.php'; ?>
 <h3>Kullanıcı Düzenle</h3>
-<form action="user_edit.php?id=<?php echo $user_id; ?>" method="post" enctype="multipart/form-data">
+<form action="user_edit.php?id=<?php echo $user_id; ?>" method="post" enctype="multipart/form-data" >
     <div class="row">
         <div class="col-12 mb-3">
             <div class="input-group">
