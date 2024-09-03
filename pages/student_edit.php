@@ -81,6 +81,11 @@ function uploadFile($file, $allowedTypes = ['application/pdf'], $destinationDir 
     return $defaultFile;
 }
 
+// Güvenli htmlspecialchars fonksiyonu
+function safe_htmlspecialchars($value) {
+    return $value !== null ? htmlspecialchars($value, ENT_QUOTES, 'UTF-8') : '';
+}
+
 // Kullanıcı giriş kontrolü
 if (!isset($_SESSION['user_id']) || ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'secretary')) {
     header("Location: login.php");
@@ -225,25 +230,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-12 input-group mb-3">
             <input type="file" class="form-control" name="student_photo" accept="image/*" capture="environment" id="student_photo">
             <label class="input-group-text" for="student_photo">Öğrenci Fotoğrafı &nbsp <?php if ($student['student_photo']) { ?>
-                <img src="<?php echo htmlspecialchars($student['student_photo']); ?>" alt="Öğrenci Fotoğrafı"style="max-height: 20px;">
+                <img src="<?php echo safe_htmlspecialchars($student['student_photo']); ?>" alt="Öğrenci Fotoğrafı"style="max-height: 20px;">
             <?php } ?></label>
         </div>
 
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Adı" value="<?php echo htmlspecialchars($student['first_name']); ?>" required>
+                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Adı" value="<?php echo safe_htmlspecialchars($student['first_name']); ?>" required>
                 <label for="first_name">Adı</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Soyadı" value="<?php echo htmlspecialchars($student['last_name']); ?>" required>
+                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Soyadı" value="<?php echo safe_htmlspecialchars($student['last_name']); ?>" required>
                 <label for="last_name">Soyadı</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="tc_no" name="tc_no" placeholder="T.C. Kimlik No" value="<?php echo htmlspecialchars($student['tc_no']); ?>" required>
+                <input type="text" class="form-control" id="tc_no" name="tc_no" placeholder="T.C. Kimlik No" value="<?php echo safe_htmlspecialchars($student['tc_no']); ?>" required>
                 <label for="tc_no">T.C. Kimlik No</label>
             </div>
         </div>
@@ -258,31 +263,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="disability_type" name="disability_type" placeholder="Engel Tipi" value="<?php echo htmlspecialchars($student['disability_type']); ?>">
+                <input type="text" class="form-control" id="disability_type" name="disability_type" placeholder="Engel Tipi" value="<?php echo safe_htmlspecialchars($student['disability_type']); ?>">
                 <label for="disability_type">Engel Tipi</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="education_program" name="education_program" placeholder="Eğitim Programı" value="<?php echo htmlspecialchars($student['education_program']); ?>">
+                <input type="text" class="form-control" id="education_program" name="education_program" placeholder="Eğitim Programı" value="<?php echo safe_htmlspecialchars($student['education_program']); ?>">
                 <label for="education_program">Eğitim Programı</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Doğum Tarihi" value="<?php echo htmlspecialchars($student['birthdate']); ?>" required>
+                <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Doğum Tarihi" value="<?php echo safe_htmlspecialchars($student['birthdate']); ?>" required>
                 <label for="birthdate">Doğum Tarihi</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="birthplace" name="birthplace" placeholder="Doğum Yeri" value="<?php echo htmlspecialchars($student['birthplace']); ?>">
+                <input type="text" class="form-control" id="birthplace" name="birthplace" placeholder="Doğum Yeri" value="<?php echo safe_htmlspecialchars($student['birthplace']); ?>">
                 <label for="birthplace">Doğum Yeri</label>
             </div>
         </div>
         <div class="col-12 mb-3">
             <div class="form-floating">
-                <textarea class="form-control" id="student_info" name="student_info" placeholder="Öğrenci Hakkında"><?php echo htmlspecialchars($student['student_info']); ?></textarea>
+                <textarea class="form-control" id="student_info" name="student_info" placeholder="Öğrenci Hakkında"><?php echo safe_htmlspecialchars($student['student_info']); ?></textarea>
                 <label for="student_info">Öğrenci Hakkında</label>
             </div>
         </div>
@@ -293,25 +298,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-12 input-group mb-3">
             <input type="file" class="form-control" name="guardian_photo" accept="image/*" capture="environment" id="guardian_photo">
             <label class="input-group-text" for="guardian_photo">Veli Fotoğrafı &nbsp <?php if ($student['guardian_photo']) { ?>
-                <img src="<?php echo htmlspecialchars($student['guardian_photo']); ?>" alt="Veli Fotoğrafı" style="max-height: 20px;">
+                <img src="<?php echo safe_htmlspecialchars($student['guardian_photo']); ?>" alt="Veli Fotoğrafı" style="max-height: 20px;">
             <?php } ?></label>
 
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="guardian_name" name="guardian_name" placeholder="Veli Adı Soyadı" value="<?php echo htmlspecialchars($student['guardian_name']); ?>" required>
+                <input type="text" class="form-control" id="guardian_name" name="guardian_name" placeholder="Veli Adı Soyadı" value="<?php echo safe_htmlspecialchars($student['guardian_name']); ?>" required>
                 <label for="guardian_name">Veli Adı Soyadı</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="guardian_phone" name="guardian_phone" placeholder="Cep Telefonu" value="<?php echo htmlspecialchars($student['guardian_phone']); ?>" required>
+                <input type="text" class="form-control" id="guardian_phone" name="guardian_phone" placeholder="Cep Telefonu" value="<?php echo safe_htmlspecialchars($student['guardian_phone']); ?>" required>
                 <label for="guardian_phone">Cep Telefonu</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <textarea class="form-control" id="address" name="address" placeholder="Adres" required><?php echo htmlspecialchars($student['address']); ?></textarea>
+                <textarea class="form-control" id="address" name="address" placeholder="Adres" required><?php echo safe_htmlspecialchars($student['address']); ?></textarea>
                 <label for="address">Adres</label>
             </div>
         </div>
@@ -336,25 +341,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="location" name="location" placeholder="Konum" value="<?php echo htmlspecialchars($student['location']); ?>">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Konum" value="<?php echo safe_htmlspecialchars($student['location']); ?>">
                 <label for="location">Konum</label>
             </div>
         </div>
         <div class="col-12 mb-3">
             <div class="form-floating">
-                <textarea class="form-control" id="guardian_info" name="guardian_info" placeholder="Veli Hakkında"><?php echo htmlspecialchars($student['guardian_info']); ?></textarea>
+                <textarea class="form-control" id="guardian_info" name="guardian_info" placeholder="Veli Hakkında"><?php echo safe_htmlspecialchars($student['guardian_info']); ?></textarea>
                 <label for="guardian_info">Veli Hakkında</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="second_contact_name" name="second_contact_name" placeholder="İkinci Kişi" value="<?php echo htmlspecialchars($student['second_contact_name']); ?>">
+                <input type="text" class="form-control" id="second_contact_name" name="second_contact_name" placeholder="İkinci Kişi" value="<?php echo safe_htmlspecialchars($student['second_contact_name']); ?>">
                 <label for="second_contact_name">İkinci Kişi</label>
             </div>
         </div>
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <input type="text" class="form-control" id="second_contact_phone" name="second_contact_phone" placeholder="İkinci Kişi Tel." value="<?php echo htmlspecialchars($student['second_contact_phone']); ?>">
+                <input type="text" class="form-control" id="second_contact_phone" name="second_contact_phone" placeholder="İkinci Kişi Tel." value="<?php echo safe_htmlspecialchars($student['second_contact_phone']); ?>">
                 <label for="second_contact_phone">İkinci Kişi Tel.</label>
             </div>
         </div>
@@ -364,7 +369,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="file" class="form-control" name="ram_report" accept=".pdf">
             <label class="input-group-text" for="ram_report">RAM Raporu (PDF)</label>
             <?php if ($student['ram_report']) { ?>
-                <a href="<?php echo htmlspecialchars($student['ram_report']); ?>" class="btn btn-success" target="_blank"><i class="bi bi-file-earmark-pdf"></i> Mevcut RAM Raporu</a>
+                <a href="<?php echo safe_htmlspecialchars($student['ram_report']); ?>" class="btn btn-success" target="_blank"><i class="bi bi-file-earmark-pdf"></i> Mevcut RAM Raporu</a>
             <?php } ?>
         </div>
     </div>
