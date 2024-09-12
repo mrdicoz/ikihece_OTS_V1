@@ -48,7 +48,9 @@
 </nav>
 
 <!-- İkinci Navbar (Arama ve Filtreleme) -->
+
 <div class="bos" style=" height: 75px"></div>
+<?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') { ?>    
 <div class="row m-0">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
@@ -111,3 +113,54 @@
     </nav>
 </div>
 <?php } ?>
+<?php } ?>
+
+<?php if (basename($_SERVER['PHP_SELF']) !== 'login.php'): ?>
+<div class="navigation-buttons">
+    <a href="javascript:history.back()" class="btn btn-success nav-left-btn">
+        <i class="bi bi-arrow-left-circle"></i>
+    </a>
+    <a href="javascript:history.forward()" class="btn btn-success nav-right-btn">
+        <i class="bi bi-arrow-right-circle"></i>
+    </a>
+</div>
+
+<style>
+.navigation-buttons {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.nav-right-btn {
+    pointer-events: auto;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px 0px 0px 5px;
+}
+
+.nav-left-btn {
+    pointer-events: auto;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.nav-left-btn {
+    margin-left: 0px;
+}
+
+.nav-right-btn {
+    margin-right: 0px;
+}
+</style>
+<?php endif; ?>
