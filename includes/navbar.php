@@ -54,7 +54,7 @@
 <div class="row m-0">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerSearch" aria-controls="navbarTogglerSearch" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler mx-auto " type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerSearch" aria-controls="navbarTogglerSearch" aria-expanded="false" aria-label="Toggle navigation">
                 <span class=""><i class="bi bi-search"> Ara</i></span>
             </button>
             <div class="collapse justify-content-center navbar-collapse" id="navbarTogglerSearch">
@@ -128,7 +128,7 @@
 <style>
 .navigation-buttons {
     position: fixed;
-    top: 50%;
+    top: 75px;
     left: 0;
     right: 0;
     display: flex;
@@ -144,7 +144,7 @@
     display: inline-block;
     padding: 10px 20px;
     font-size: 18px;
-    border-radius: 5px 0px 0px 5px;
+    border-radius: 25px 0px 0px 25px;
 }
 
 .nav-left-btn {
@@ -152,7 +152,7 @@
     display: inline-block;
     padding: 10px 20px;
     font-size: 18px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 25px 25px 0px;
 }
 
 .nav-left-btn {
