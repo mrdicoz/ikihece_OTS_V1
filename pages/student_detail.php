@@ -81,7 +81,9 @@ $guardian_photo = !empty($student['guardian_photo']) ? $student['guardian_photo'
                     <?php if (in_array($_SESSION['role'], ['admin', 'secretary', 'teacher'])): ?>
                         <a href="student_edit.php?id=<?= $student_id; ?>" class="btn btn-warning w-100"><i class="bi bi-gear"></i> Düzenle</a>
                         <a href="student_note.php?id=<?= $student_id; ?>" class="btn btn-secondary w-100"><i class="bi bi-info-circle"></i> Hakkında</a>
-                        <a href="../<?= htmlspecialchars($student['ram_report']); ?>" target="_blank" class="btn btn-info w-100"><i class="bi bi-file-earmark-pdf"></i> RAM Raporu</a>
+                        <a href="view_pdf.php?file=<?= urlencode($student['ram_report']); ?>" target="_blank" class="btn btn-info w-100"><i class="bi bi-file-earmark-pdf"></i> RAM Raporu
+</a>
+
                     <?php endif; ?>
                 </div>
             </div>
