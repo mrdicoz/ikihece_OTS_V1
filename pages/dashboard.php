@@ -42,6 +42,9 @@ $query = "SELECT id, student_photo, first_name, last_name, guardian_photo, guard
           LIMIT $offset, $students_per_page";
 $result = mysqli_query($baglanti, $query);
 
+// Sıra numarası için sayaç
+$counter = $offset + 1;
+
 function getStudentPhoto($photoPath) {
     if (empty($photoPath) || !file_exists($photoPath)) {
         return '/assets/images/user.jpg';  // Varsayılan fotoğraf
@@ -63,6 +66,7 @@ function formatPhoneNumberForWhatsApp($phone) {
     <table class="table table-striped table-light align-middle table-hover">
         <thead>
             <tr>
+                <th class="col-1">Sıra</th> <!-- Sıra numarası için yeni sütun -->
                 <th class="col-1">Fotoğraf</th>
                 <th class="col-2">Adı</th>
                 <th class="col-2">Soyadı</th>
@@ -75,6 +79,7 @@ function formatPhoneNumberForWhatsApp($phone) {
         <tbody class="table-group-divider">
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                 <tr>
+                    <td class="col-1"><?php echo $counter++; ?></td> <!-- Sıra numarası gösteriliyor -->
                     <td class="col-1"><img src="<?php echo htmlspecialchars(getStudentPhoto($row['student_photo'])); ?>" alt="Öğrenci Fotoğrafı" width="50" height="50" class="img-thumbnail"></td>
                     <td class="col-2"><?php echo htmlspecialchars($row['first_name']); ?></td>
                     <td class="col-2"><?php echo htmlspecialchars($row['last_name']); ?></td>

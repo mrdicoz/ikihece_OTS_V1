@@ -53,10 +53,11 @@ $guardian_photo = !empty($student['guardian_photo']) ? $student['guardian_photo'
                         <p class="card-text"><strong>Eğitim Programı:</strong> <?= htmlspecialchars($student['education_program']) ?></p>
                         <p class="card-text"><strong>Doğum Yeri:</strong> <?= htmlspecialchars($student['birthplace']) ?></p>
                         <p class="card-text"><strong>Öğrenci Hakkında:</strong> <?= htmlspecialchars($student['student_info']) ?></p>
-                    <?php endif; ?>
-                    <p class="card-text"><strong>Adres:</strong> <?= htmlspecialchars($student['address']) ?></p>
-                    <p class="card-text"><strong>Cep Telefonu:</strong> <?= htmlspecialchars($student['guardian_phone']) ?></p>
+                        <p class="card-text"><strong>Adres:</strong> <?= htmlspecialchars($student['address']) ?></p>
+                        <p class="card-text "><strong>Cep Telefonu:</strong><a href="tel:<?= htmlspecialchars($student['guardian_phone']) ?>" class="link-success link-underline link-underline-opacity-0"><?= htmlspecialchars($student['guardian_phone']) ?></a></p>
+
                     <p> <a href="<?= htmlspecialchars($student['location']) ?>" target="_blank" class="btn btn-success w-100"><i class="bi bi-geo-alt-fill"></i> Konum</a></p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -71,20 +72,20 @@ $guardian_photo = !empty($student['guardian_photo']) ? $student['guardian_photo'
                         <p class="card-text"><strong>Adres:</strong> <?= htmlspecialchars($student['address']) ?></p>
                         <p class="card-text"><strong>Mesafe:</strong> <?= htmlspecialchars($student['distance']) ?></p>
                         <p class="card-text"><strong>Ulaşım:</strong> <?= htmlspecialchars($student['transportation']) ?></p>
-                        <p class="card-text"><strong>İkinci Kişi:</strong> <?= htmlspecialchars($student['second_contact_name']) ?></p>
+                        <p class="card-text"><strong>İkinci iletişim:</strong> <?= htmlspecialchars($student['second_contact_name']) ?></p>
                         <p class="card-text"><strong>İkinci Numara:</strong> <?= htmlspecialchars($student['second_contact_phone']) ?></p>
                     </div>
                 </div>
 
                 <!-- Butonlar Mobilde Alt Alta, Masaüstünde Yan Yana -->
                 <div class="d-flex flex-column flex-md-row gap-2">
-                    <?php if (in_array($_SESSION['role'], ['admin', 'secretary', 'teacher'])): ?>
+                <?php if (in_array($_SESSION['role'], ['admin', 'secretary'])): ?>
                         <a href="student_edit.php?id=<?= $student_id; ?>" class="btn btn-warning w-100"><i class="bi bi-gear"></i> Düzenle</a>
+                        <?php endif; ?>
+                <?php if (in_array($_SESSION['role'], ['admin', 'secretary', 'teacher'])): ?>
                         <a href="student_note.php?id=<?= $student_id; ?>" class="btn btn-secondary w-100"><i class="bi bi-info-circle"></i> Hakkında</a>
-                        <a href="view_pdf.php?file=<?= urlencode($student['ram_report']); ?>" target="_blank" class="btn btn-info w-100"><i class="bi bi-file-earmark-pdf"></i> RAM Raporu
-</a>
-
-                    <?php endif; ?>
+                        <a href="view_pdf.php?file=<?= urlencode($student['ram_report']); ?>" target="_blank" class="btn btn-info w-100"><i class="bi bi-file-earmark-pdf"></i> RAM Raporu</a>
+                <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>

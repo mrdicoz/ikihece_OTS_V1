@@ -212,13 +212,20 @@ function formatPhoneNumberForWhatsApp($phone) {
 <!-- Sayfalama -->
 <nav>
     <ul class="pagination justify-content-center mt-3">
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <?php
+        // Mevcut sayfa URL'sini al ve sayfa numarası hariç diğer parametreleri koru
+        $query_params = $_GET; // Mevcut GET parametrelerini al
+        for ($i = 1; $i <= $total_pages; $i++):
+            $query_params['page'] = $i; // Sayfa numarasını güncelle
+            $query_string = http_build_query($query_params); // Tüm parametreleri string olarak birleştir
+        ?>
             <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
-                <a class="page-link link-success" href="student_search.php?page=<?= $i; ?>"><?= $i; ?></a>
+                <a class="page-link link-success" href="student_search.php?<?= $query_string; ?>"><?= $i; ?></a>
             </li>
         <?php endfor; ?>
     </ul>
 </nav>
+
 
 <?php include '../includes/footer.php'; ?>
 
