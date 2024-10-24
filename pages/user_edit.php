@@ -123,11 +123,12 @@ if (isset($_GET['id'])) {
 
         <div class="col-6 mb-3">
             <div class="form-floating">
-                <select class="form-select" id="role" name="role" required>
+                <select class="form-select" id="role" name="role"  required>
                     <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Admin</option>
                     <option value="teacher" <?php if ($user['role'] == 'teacher') echo 'selected'; ?>>Öğretmen</option>
                     <option value="secretary" <?php if ($user['role'] == 'secretary') echo 'selected'; ?>>Sekreter</option>
                     <option value="driver" <?php if ($user['role'] == 'driver') echo 'selected'; ?>>Şoför</option>
+                    <option value="reporter" <?php if ($user['role'] == 'reporter') echo 'selected'; ?>>Raportör</option>
                 </select>
                 <label for="role">Rol</label>
             </div>

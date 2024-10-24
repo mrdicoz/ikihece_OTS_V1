@@ -50,7 +50,7 @@
 <!-- İkinci Navbar (Arama ve Filtreleme) -->
 
 <div class="bos" style=" height: 75px"></div>
-<?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary') { ?>    
+<?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'secretary'|| $_SESSION['role'] == 'reporter') { ?>    
 <div class="row m-0">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">

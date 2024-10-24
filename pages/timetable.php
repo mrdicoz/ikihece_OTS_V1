@@ -75,10 +75,10 @@ $today = date('N') - 1;
 $todayIndex = $today >= 0 && $today < count($days) ? $today : 0;
 ?>
 
-<?php $pageTitle = "Ders Programı"; include '../includes/header.php'; ?>
+<?php $pageTitle = "Sabit Planlama"; include '../includes/header.php'; ?>
 
 <div class="container mt-5">
-    <h2 class="text-center">Ders Programı</h2>
+    <h2 class="text-center">Sabit Planlama</h2>
 
     <!-- Mobil ekranlar için ileri geri butonları -->
     <div class="d-flex justify-content-between mb-3 d-md-none">

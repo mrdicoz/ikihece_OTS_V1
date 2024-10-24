@@ -32,10 +32,10 @@ $result = mysqli_query($baglanti, $query);
                     </div>
                     <div class="card-footer d-flex justify-content-start">
                         <?php if ($_SESSION['role'] == 'admin') { ?>
-                            <a href="timetable.php?teacher_id=<?php echo $row['id']; ?>" class="btn btn-success  btn-sm me-2"><i class="bi bi-calendar-heart-fill"></i> Sabit</a>
+                            <a href="timetable.php?teacher_id=<?php echo $row['id']; ?>" class="btn btn-success  btn-sm me-2"><i class="bi bi-calendar-heart-fill"></i> Sabit P.</a>
                         <?php } ?>    
-                        <a href="weeklytable.php?teacher_id=<?php echo $row['id']; ?>" class="btn btn-success  btn-sm me-2"><i class="bi bi-calendar-event-fill"></i> Haftalık Tablo</a>
-                        <a href="weeklytable_detail.php?teacher_id=<?php echo $row['id']; ?>" class="btn btn-secondary  btn-sm"><i class="bi bi-eye-fill"></i> Gör</a>
+                        <a href="weeklytable.php?teacher_id=<?php echo $row['id']; ?>" class="btn btn-success  btn-sm me-2"><i class="bi bi-calendar-event-fill"></i> Ders P.</a>
+                        <a href="weeklytable_detail.php?teacher_id=<?php echo $row['id']; ?>" class="btn btn-secondary  btn-sm"><i class="bi bi-eye-fill"></i> Görüntüle</a>
                     </div>
                 </div>
             </div>

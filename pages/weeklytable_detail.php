@@ -63,10 +63,10 @@ $today = date('N');
 $todayIndex = ($today == 7) ? 5 : $today - 1; // Pazar günleri Cumartesi gösterilecek
 ?>
 
-<?php $pageTitle = "Haftalık Tablo Detayları"; include '../includes/header.php'; ?>
+<?php $pageTitle = "Haftalık Ders Programı"; include '../includes/header.php'; ?>
 
 <div class="container mt-5">
-    <h2 class="text-center">Haftalık Tablo Detayları</h2>
+    <h2 class="text-center">Haftalık Ders Programı</h2>
 
     <!-- Mobil ekranlar için ileri geri butonları -->
     <div class="d-flex justify-content-between mb-3 d-md-none">
