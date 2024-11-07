@@ -36,9 +36,17 @@ $total_students = $total_students_row['total'];  // Toplam öğrenci sayısı
 // Toplam sayfa sayısını hesapla
 $total_pages = ceil($total_students / $students_per_page);
 
+// Sıralama için varsayılan değerler
+$sort_field = isset($_GET['sort']) ? $_GET['sort'] : 'first_name';
+$sort_order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+
+// SQL sorgusuna sıralama ekleme
+$sort_query = " ORDER BY $sort_field $sort_order";
+
 // Belirli sayfa için öğrenci kayıtlarını al
 $query = "SELECT id, student_photo, first_name, last_name, guardian_photo, guardian_name, guardian_phone 
           FROM students 
+          $sort_query
           LIMIT $offset, $students_per_page";
 $result = mysqli_query($baglanti, $query);
 
@@ -67,9 +75,17 @@ function formatPhoneNumberForWhatsApp($phone) {
         <thead>
             <tr>
                 <th class="col-1">Sıra</th> <!-- Sıra numarası için yeni sütun -->
-                <th class="col-1">Fotoğraf</th>
-                <th class="col-2">Adı</th>
-                <th class="col-2">Soyadı</th>
+                <th class="col-1">Foto</th>
+                <th class="col-2">
+                    <a href="dashboard.php?sort=first_name&order=<?php echo $sort_order === 'asc' ? 'desc' : 'asc'; ?>" class="link-success link-underline link-underline-opacity-0">
+                        Adı <?php echo $sort_field === 'first_name' ? ($sort_order === 'asc' ? '<i class="bi bi-sort-down"></i>' : '<i class="bi bi-sort-up"></i>') : ''; ?>
+                    </a>
+                </th>
+                <th class="col-2">
+                    <a href="dashboard.php?sort=last_name&order=<?php echo $sort_order === 'asc' ? 'desc' : 'asc'; ?>" class="link-success link-underline link-underline-opacity-0">
+                        Soyad <?php echo $sort_field === 'last_name' ? ($sort_order === 'asc' ? '<i class="bi bi-sort-down"></i>' : '<i class="bi bi-sort-up"></i>') : ''; ?>
+                    </a>
+                </th>
                 <th class="col-1 d-none d-lg-table-cell">Veli</th>
                 <th class="col-2 d-none d-lg-table-cell">Veli Adı</th>
                 <th class="col-2 d-none d-lg-table-cell">Telefon</th>
